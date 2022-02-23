@@ -1,0 +1,33 @@
+---
+- name: Setup Automatic updates
+  hosts: relays
+  remote_user: root
+
+  tasks:
+
+    #  - name: Insert 50unattended-upgrades
+    #    blockinfile:
+    #      path: /etc/apt/apt.conf.d/50unattended-upgrades
+    #      block: | 
+        
+  - name: Copy 50unattended from /files
+    copy:
+      src: /etc/ansible/files/50unattended-upgrades
+      dest: /etc/apt/apt.conf.d/50unattended-upgrades
+      force: yes
+ 
+  - name: Insert 20autoupgrades
+    blockinfile:
+      path: /etc/apt/apt.conf.d/20auto-upgrades
+      block: | 
+        APT::Periodic::Update-Package-Lists "1";
+        APT::Periodic::AutocleanInterval "5";
+        APT::Periodic::Unattended-Upgrade "1";
+        APT::Periodic::Verbose "1";
+
+        #  - name: Enable autoreboot
+        #    blockinfile:
+        #      path: /etc/apt/apt.conf.d/50unattended-upgrades
+        #      insertafter: EOF
+        #      block: |
+        #        Unattended-Upgrade::Automatic-Reboot "true";

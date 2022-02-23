@@ -1,0 +1,9 @@
+---
+- name: Retrieve the relays fingerprint
+  hosts: relays
+  remote_user: root
+
+  tasks:
+  - name: Stop Tor Daemon
+    shell:
+      cmd: systemctl Stop tor    

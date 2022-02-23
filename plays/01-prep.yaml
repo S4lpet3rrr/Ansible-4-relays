@@ -1,0 +1,70 @@
+---
+- name: SHH CONFIGURATION ON RELAYS
+  hosts: relays
+  remote_user: root
+
+  tasks:
+  - name: Update Pakages
+    apt:
+      name: "*"
+      state: latest
+
+  - name: Install packages
+    package:
+      name:
+        - zsh
+        - curl
+        - git 
+        - ncdu
+        - tree
+        - vim
+        - nano
+        - ufw
+        - net-tools
+        - dnsutils
+        - htop
+        - unattended-upgrades
+        - apt-listchanges   
+      state: latest
+
+  - name: Disable MOTD
+    shell: 
+      cmd: uname -snrvm > /var/run/motd.dynamic && sudo systemctl disable motd 
+
+  - name: Delete static MOTD
+    shell:
+      cmd: mkdir -p /etc/update-motd.d && rm -rf /etc/motd && rm /etc/update-motd.d/*;
+
+  - name: Copy Issue.net
+    copy:
+      src: /etc/ansible/files/issue.net
+      dest: /etc/issue.net
+
+  - name: Copy sshd_config
+    copy:
+      src: /etc/ansible/files/sshd_config
+      dest: /etc/ssh/sshd_config
+      backup: yes
+  
+  - name: Copy Skull into SSH
+    copy:
+      src: /etc/ansible/files/SSH-MODT-TEXT.txt
+      dest: /etc/ssh/SSH-MODT-TEXT.txt
+
+  - name: Copy 00-skull
+    copy:
+      src: /etc/ansible/files/00-skull
+      dest: /etc/update-motd.d/00-sull
+
+  - name: Copy 10-info
+    copy:   
+      src: /etc/ansible/files/10-info
+      dest: /etc/update-motd.d/10-info
+
+  - name: Make MOTD's executable
+    shell:
+      cmd: chmod a+x /etc/update-motd.d/*  
+
+  - name: Restart SSH
+    shell:
+      cmd: systemctl restart ssh    

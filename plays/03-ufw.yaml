@@ -1,0 +1,32 @@
+---
+- name: Setup UFW
+  hosts: relays
+  remote_user: root
+
+  tasks:
+
+  - name: Default deny 
+    shell:
+      cmd: ufw default deny
+
+  - name: Enable Logging 
+    shell:
+      cmd: ufw logging on 
+
+  - name: Allow 7829 Port TCP
+    community.general.ufw:
+      rule: allow
+      proto: tcp
+      to_port: '7829' 
+
+  - name: Allow 80 DirPort TCP
+    shell:
+      cmd: ufw allow 80/tcp
+  
+  - name: Allow 443 ORPort TCP
+    shell:
+      cmd: ufw allow 443/tcp    
+
+  - name: Enable UFW
+    community.general.ufw:
+      state: enabled

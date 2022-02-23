@@ -1,0 +1,14 @@
+---
+- name: Execute Harding Script
+  hosts: relays
+  remote_user: root
+
+  tasks:
+  - name: Copy Script to nodes
+    copy: 
+      src: /etc/ansible/files/ssh-hardening.sh
+      dest: /tmp/ssh-hardening.sh
+
+  - name: chmod & Execute
+    shell:
+      cmd: chmod +x /tmp/ssh-hardening.sh && /tmp/ssh-hardening.sh     

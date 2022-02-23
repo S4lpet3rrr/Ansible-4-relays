@@ -1,0 +1,6 @@
+---
+
+hosts: relays
+tasks:
+  - name: Run this command and ignore the result
+    ansible.builtin.shell: /usr/bin/id

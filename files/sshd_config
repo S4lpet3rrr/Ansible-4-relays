@@ -1,0 +1,17 @@
+Port 7829
+Protocol 2
+PermitRootLogin without-password
+PasswordAuthentication no
+PubkeyAuthentication yes
+PermitEmptyPasswords no
+MaxAuthTries 3
+MaxSessions 4
+Loglevel info
+AuthorizedKeysFile      .ssh/authorized_keys .ssh/authorized_keys2
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+AcceptEnv LANG LC_*
+Banner /etc/issue.net
+PrintMotd no
+UsePAM yes
+ChallengeResponseAuthentication no
+X11Forwarding no 
