@@ -1,0 +1,106 @@
+---
+- name: Configure Tor Relay
+  hosts: relays
+
+  tasks:
+  - name: Install apt https transport & nyx
+    package:
+      name: 
+        - apt-transport-https
+        - nyx
+      state: latest
+
+  - name: Add new File tor.list 
+    ansible.builtin.file:
+      path: /etc/apt/sources.list.d/tor.list
+      state: touch
+
+  - name: Provide the Torporject Repo
+    ansible.builtin.blockinfile:
+      path: /etc/apt/sources.list.d/tor.list  
+      block: |
+        deb     [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org buster main
+        deb-src [signed-by=/usr/share/keyrings/tor-archive-keyring.gpg] https://deb.torproject.org/torproject.org buster main
+
+  - name: Signing Keys
+    ansible.builtin.shell:
+      cmd:  wget -qO- https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc | gpg --dearmor | tee /usr/share/keyrings/tor-archive-keyring.gpg >/dev/null
+  
+  - name: Update Package List  
+    apt: 
+      update_cache: yes
+  
+  - name: Install Tor  
+    apt:
+      name: tor
+      state: latest
+  
+  - name: Install tor-geoipdb
+    apt:
+      name: tor-geoipdb 
+      state: latest
+
+  - name: Install Keyrings
+    apt:
+      name: deb.torproject.org-keyring
+      state: latest
+  
+  - name: Stop and enable Tor from startup
+    shell:
+      cmd: systemctl stop tor && systemctl enable tor
+
+  - name: Clean /etc/tor/ & /var/lib/tor
+    shell:
+      cmd: rm /etc/tor/* && rm /var/lib/tor/*
+ 
+  - name: Create Instances
+    shell:
+      cmd: tor-instance-create first && tor-instance-create second
+
+  - name: Stop and enable first instance 
+    shell:
+      cmd: systemctl stop tor@first && systemctl enable tor@first
+
+  - name: Stop and enable second instance
+    shell:
+      cmd: systemctl stop tor@second && systemctl enable tor@second  
+   
+  - name: Copy and Backup torrc to first instance
+    copy:
+      src: /etc/ansible/files/torrc
+      dest: /etc/tor/instances/first
+      force: yes
+
+  - name: Copy and Backup torrc2 to second instance
+    copy:
+      src: /etc/ansible/files/torrc2
+      dest: /etc/tor/instances/second
+      force: yes
+  
+  - name: Copy Tor Notice
+    copy:
+      src: /etc/ansible/files/tor-exit-notice.html
+      dest: /etc/tor/tor-exit-notice.html
+      force: yes
+
+
+
+        #  - name: very very weird way to make it unique 
+    #    shell:
+      #      cmd: touch /tmp/namegen.sh
+
+        #  - name: Set Random Nodename
+    #    blockinfile:
+      #      path: /tmp/namegen.sh
+        #      block: |
+        #        #!/bin/bash
+        #        echo Nickname Th4tsN0tMyNode3$RANDOM   
+  
+        #  - name: MAKE IT EXECUTABLE 
+    #    shell:
+      #      cmd: chmod +x /tmp/namegen.sh 
+  
+        #  - name: FINALLY MAKE IT UNIQUE 
+    #    shell:
+      #      cmd: /tmp/namegen.sh >> /etc/tor/torrc
+                

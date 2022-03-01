@@ -1,0 +1,9 @@
+---
+- name: Start Relays
+  hosts: relays
+  remote_user: root
+
+  tasks:
+  - name: Restart Tor
+    shell:
+      cmd: systemctl restart tor    

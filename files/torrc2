@@ -4,11 +4,11 @@ RunAsDaemon 1
 DataDirectory /var/lib/tor
 ControlPort 9051
 CookieAuthentication 1
-ORPort 443
+ORPort 80
 RelayBandwidthRate 25000 KB
 RelayBandwidthBurst 30000 KB
 ContactInfo email:sendcomplains@keemail.me abuse:sendcomplains@keemail.me sandbox:y tls:openssl aesni:y autoupdate:y confmgmt:ansible ciissversion:2
-DirPort 8081
+DirPort 8080
 DirPortFrontPage /etc/tor/tor-exit-notice.html
 ExitPolicy reject *:
 ExitRelay 0
