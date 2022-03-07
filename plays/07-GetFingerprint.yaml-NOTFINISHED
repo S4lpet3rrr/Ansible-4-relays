@@ -2,8 +2,36 @@
 - name: Retrieve the relays fingerprint
   hosts: relays
   remote_user: root
-
+        
   tasks:
-  - name: Stop Tor Daemon
+  - name: Save the fingerprints of each Node in /tmp/fingerprint
     shell:
-      cmd: systemctl Stop tor    
+      cmd: cat /var/lib/tor/fingerprint | awk '{print $2}' > /tmp/fingerprint
+ 
+  
+  - name:  Approach
+    shell:
+      cmd: "ssh q-i ~/.ssh/id_ed25519 "
+      
+ # - name: Ansible Rsync
+ #   synchronize:
+ #     mode: pull  
+ #     src: /tmp/fingerprint
+ #     dest: /tmp/fingerprint   
+ 
+  #- name: Assemble 
+  #  assemble:
+  #    remote_src: yes
+  #    src: /tmp/ID
+  #    dest: /tmp/fingerprint  
+      
+  #- name: Copy Fingerprint File to Local Controller
+  #  fetch:
+  #    src: /tmp/fingerprint
+  #    flat: yes
+  #    dest: "{{ dir }}.sourcelist"
+
+  #- name: Merge Files locally 
+  #  run_once: yes
+  #  delegate_to: localhost
+    

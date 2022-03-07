@@ -1,0 +1,21 @@
+---
+- name: Retrieve the relays fingerprint
+  hosts: relays
+  remote_user: root
+ 
+  tasks:
+    - name: Print /tmp/fingerprint
+      debug:
+        msg: 'Das VZ: {{ relays }}'
+
+    # - name: Retrieve the fingerprints from all nodes
+    # shell:
+    # cmd: cat /var/lib/tor/fingerprint | awk '{print $2}' >> /tmp/fingerprint
+
+    #- name: Copy Fingerprint File to Local Controller
+    #fetch:
+    # src: /tmp/fingerprint
+    # dest: /tmp/fingerprint
+
+    #- name: Merge Files locally 
+    
