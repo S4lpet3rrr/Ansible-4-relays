@@ -59,24 +59,4 @@
     copy:
       src: /etc/ansible/files/tor-exit-notice.html
       dest: /etc/tor/tor-exit-notice.html
-      force: yes
-
-        #  - name: very very weird way to make it unique 
-    #    shell:
-      #      cmd: touch /tmp/namegen.sh
-
-        #  - name: Set Random Nodename
-    #    blockinfile:
-      #      path: /tmp/namegen.sh
-        #      block: |
-        #        #!/bin/bash
-        #        echo Nickname Th4tsN0tMyNode3$RANDOM   
-  
-        #  - name: MAKE IT EXECUTABLE 
-    #    shell:
-      #      cmd: chmod +x /tmp/namegen.sh 
-  
-        #  - name: FINALLY MAKE IT UNIQUE 
-    #    shell:
-      #      cmd: /tmp/namegen.sh >> /etc/tor/torrc
-                
+      force: yes  
